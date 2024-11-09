@@ -34,3 +34,4 @@ lerna-debug.log*
 # wrangler
 .wrangler
 wrangler.toml
+worker-configuration.d.ts

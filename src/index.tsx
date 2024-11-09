@@ -3,35 +3,34 @@ import { cors } from "hono/cors"
 import { logger } from "hono/logger"
 import { secureHeaders } from "hono/secure-headers"
 
+import { _devTimingMiddleware, _errorHandlerMiddleware } from "~/middlewares"
 import { renderer } from "~/middlewares/renderer"
+import { indexRoutes } from "~/routes"
 
-let counter = 0
+export type HonoBindings = {
+  [key in keyof CloudflareBindings]: CloudflareBindings[key]
+}
 
-const app = new Hono()
+export type HonoVariables = {
+  // Database gose here
+  db: unknown
+}
+
+export type HonoEnv = {
+  Bindings: HonoBindings
+  Variables: HonoVariables
+}
+
+const app = new Hono<HonoEnv>()
 
 app.use(cors())
 app.use(secureHeaders())
 app.use(logger())
 
 app.use(renderer)
+app.use(_devTimingMiddleware)
+app.use(_errorHandlerMiddleware)
 
-app.get("/", (c) => {
-  return c.render(
-    <div class="space-y-4">
-      <h1 class="text-lg font-medium text-gray-950">Hono + HTMX</h1>
-      <div class="space-y-2">
-        <div id="counter">{counter}</div>
-        <button class="border px-3 py-1 text-sm" hx-post="/api/count" hx-target="#counter">
-          Count
-        </button>
-      </div>
-    </div>
-  )
-})
-
-app.post("/api/count", (c) => {
-  counter++
-  return c.text(counter.toString())
-})
+app.route("/", indexRoutes)
 
 export default app
