@@ -4,7 +4,7 @@ import { Hono } from "hono"
 
 import AppLayout from "~/components/app-layout"
 import CreateForm from "~/components/create-form"
-import { ExpensesList } from "~/components/expenses-list"
+import { ExpensesList, ExpensesListInner } from "~/components/expenses-list"
 import Alert from "~/components/shared/alert"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/shared/card"
 import { expensesTable } from "~/db/schema"
@@ -43,5 +43,5 @@ export const indexRoutes = new Hono<HonoEnv>()
     })
   })
   .get("/expenses", (c) => {
-    return c.html(<ExpensesList context={c} />)
+    return c.html(<ExpensesListInner context={c} />)
   })

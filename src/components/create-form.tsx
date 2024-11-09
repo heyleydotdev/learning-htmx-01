@@ -16,7 +16,7 @@ export default function CreateForm({ alert, ...rest }: CreateFormProps) {
     <Form
       id="create-expense"
       hx-post="/"
-      hx-swap="outerHTML show:none"
+      hx-swap="outerHTML focus-scroll:false"
       hx-target="this"
       hx-target-400="this"
       hx-target-error="#alert-slot"
