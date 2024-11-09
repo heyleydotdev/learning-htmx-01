@@ -1,30 +1,31 @@
 import type { FormContextValues } from "~/components/shared/form"
+import type { Child } from "hono/jsx"
 
-import Alert from "~/components/shared/alert"
 import Button from "~/components/shared/button"
 import { Form, FormButton, FormControl, FormField, FormFieldset, FormLabel, FormMessage } from "~/components/shared/form"
 import Input from "~/components/shared/input"
 
 interface CreateFormProps extends FormContextValues {
-  rootError?: string | null
+  alert?: Child
 }
 
-export default function CreateForm({ rootError, ...rest }: CreateFormProps) {
+export default function CreateForm({ alert, ...rest }: CreateFormProps) {
   const today = new Date().toISOString().slice(0, 10)
 
   return (
     <Form
-      id="create-form"
+      id="create-expense"
       hx-ext="response-targets"
       hx-post="/"
-      hx-swap="outerHTML"
+      hx-swap="outerHTML show:none"
       hx-target="this"
+      hx-target-400="this"
       hx-target-error="#alert-slot"
       {...rest}
     >
       <FormFieldset>
         <div id="alert-slot" class="contents">
-          {rootError && <Alert>{rootError}</Alert>}
+          {alert}
         </div>
         <FormField name="expense">
           <FormLabel>Expense</FormLabel>
@@ -37,7 +38,9 @@ export default function CreateForm({ rootError, ...rest }: CreateFormProps) {
         </FormField>
         <FormField name="amount">
           <FormLabel>Amount</FormLabel>
-          <FormControl>{(props) => <Input type="number" min={0} placeholder="100.75" required {...props} />}</FormControl>
+          <FormControl>
+            {(props) => <Input type="number" min={0} placeholder="100.75" step={0.01} required {...props} />}
+          </FormControl>
           <FormMessage />
         </FormField>
         <FormField name="date">

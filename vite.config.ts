@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
     tsconfigPaths(),
     inject({
       htmx: "htmx.org/dist/htmx.esm",
+      exclude: ["**/*.css", "**/*.css?direct"],
     }),
   ]
 

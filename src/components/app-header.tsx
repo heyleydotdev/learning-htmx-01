@@ -4,7 +4,7 @@ import { useRequestContext } from "hono/jsx-renderer"
 
 export default function AppHeader() {
   return (
-    <header class="container sticky top-0 z-10 grid h-14 grid-cols-2 place-items-center border-b">
+    <header class="container sticky top-0 z-10 grid h-14 grid-cols-2 place-items-center border-b bg-white">
       <div class="flex items-center gap-x-2 justify-self-start">
         <a href={"/"}>
           <span class="text-sm font-semibold uppercase tracking-wide text-gray-950">

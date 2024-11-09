@@ -35,3 +35,6 @@ lerna-debug.log*
 .wrangler
 wrangler.toml
 worker-configuration.d.ts
+
+# drizzle
+drizzle

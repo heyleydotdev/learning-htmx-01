@@ -12,12 +12,18 @@
     "deploy": "bun run build && wrangler pages deploy",
     "cft": "wrangler types --env-interface CloudflareBindings",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "clean": "git clean -xdf dist debug.log"
+    "clean": "git clean -xdf dist debug.log",
+    "db:generate": "bun --env-file=../../.env run drizzle-kit generate",
+    "db:migrate": "bun --env-file=../../.env run drizzle-kit migrate",
+    "db:push": "bun run db:generate && wrangler d1 migrations apply learning-htmx-01 --local",
+    "db:push:prod": "bun run db:generate && bun run db:migrate"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.1",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@rollup/plugin-inject": "^5.0.5",
     "class-variance-authority": "^0.7.0",
+    "drizzle-orm": "^0.36.1",
     "hono": "^4.6.9",
     "htmx.org": "2.0.3",
     "tailwind-merge": "^2.5.4",
@@ -25,6 +31,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
+    "@eslint/compat": "^1.2.2",
     "@eslint/js": "^9.14.0",
     "@hono/vite-build": "^1.0.0",
     "@hono/vite-dev-server": "^0.15.1",
@@ -32,7 +39,9 @@
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.9.0",
     "autoprefixer": "^10.4.20",
+    "drizzle-kit": "^0.28.0",
     "eslint": "^9.14.0",
+    "eslint-plugin-drizzle": "^0.2.3",
     "eslint-plugin-import": "^2.31.0",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",

@@ -1,4 +1,6 @@
+import { fixupPluginRules } from "@eslint/compat"
 import eslint from "@eslint/js"
+import drizzlePlugin from "eslint-plugin-drizzle"
 import importPlugin from "eslint-plugin-import"
 import tseslint from "typescript-eslint"
 
@@ -10,6 +12,7 @@ export default tseslint.config(
     files: ["**/*.ts", "**/*.tsx"],
     plugins: {
       import: importPlugin,
+      drizzle: fixupPluginRules(drizzlePlugin),
     },
     extends: [
       eslint.configs.recommended,
@@ -42,6 +45,18 @@ export default tseslint.config(
         },
       ],
       "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+      "drizzle/enforce-delete-with-where": [
+        "error",
+        {
+          drizzleObjectName: ["db", "c.var.db", "var.db"],
+        },
+      ],
+      "drizzle/enforce-update-with-where": [
+        "error",
+        {
+          drizzleObjectName: ["db", "c.var.db", "var.db"],
+        },
+      ],
     },
   },
   {
