@@ -37,10 +37,6 @@ export const _setVariableMiddleware = createMiddleware<HonoEnv>((c, next) => {
 
 // https://github.com/t3-oss/create-t3-turbo/blob/8ca45cd2b06096c14d36a713dce32d7afcb1fed7/packages/api/src/trpc.ts#L99
 export const _devTimingMiddleware = createMiddleware<HonoEnv>(async (c, next) => {
-  if (c.req.method === "GET") {
-    return next()
-  }
-
   const start = Date.now()
 
   if (c.env.ENVIRONMENT === "development") {

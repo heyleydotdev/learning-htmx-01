@@ -19,16 +19,18 @@ export type FormProps = JSX.IntrinsicElements["form"] & FormContextValues
 
 const FormContext = createContext<FormContextValues>({} as FormContextValues)
 
-const Form = ({ prevState, errors, class: className, ...rest }: JSX.IntrinsicElements["form"] & FormContextValues) => {
+const Form = ({ "hx-ext": hx_ext, prevState, errors, ...rest }: JSX.IntrinsicElements["form"] & FormContextValues) => {
+  const exts = [hx_ext, "loading-states"].filter(Boolean).join(",")
+
   return (
     <FormContext.Provider value={{ prevState, errors }}>
-      <form class={cn("group/form", className)} hx-disabled-elt="find fieldset[data-slot='fieldset']" {...rest} />
+      <form hx-ext={exts} data-loading-states {...rest} />
     </FormContext.Provider>
   )
 }
 
 const FormFieldset = ({ class: className, ...rest }: JSX.IntrinsicElements["fieldset"]) => {
-  return <fieldset class={cn("grid gap-y-6", className)} data-slot="fieldset" {...rest} />
+  return <fieldset class={cn("grid gap-y-6", className)} data-loading-disable {...rest} />
 }
 
 type FormFieldContextValues = { id: string; name: string }
@@ -105,8 +107,10 @@ const FormMessage = ({ class: className, ...rest }: JSX.IntrinsicElements["p"]) 
 const FormButton = ({ children, type, ...rest }: PropsWithChildren<FixKeyIssue<ButtonProps>>) => {
   return (
     <Button type={type ?? "submit"} {...rest}>
-      <Spinner class="invisible absolute size-4 group-[.htmx-request]/form:visible" />
-      <span class="contents group-[.htmx-request]/form:invisible">{children}</span>
+      <Spinner class="invisible absolute" data-loading-class-remove="invisible" data-loading-class="visible" />
+      <span class="contents" data-loading-class="invisible">
+        {children}
+      </span>
     </Button>
   )
 }

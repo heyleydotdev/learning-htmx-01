@@ -1,6 +1,6 @@
-import type { Child } from "hono/jsx"
+import type { Child, JSX } from "hono/jsx"
 
-type IconsType = Record<string, (props: Record<string, string>) => Child>
+type IconsType = Record<string, (props: JSX.IntrinsicElements["svg"]) => Child>
 
 export const Icons = {
   add: (props) => (
@@ -81,6 +81,20 @@ export const Icons = {
       {...props}
     >
       <path d="M11 12H3M16 6H3M16 18H3M18 9v6M21 12h-6" />
+    </svg>
+  ),
+  spinner: (props) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      {...props}
+    >
+      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>
   ),
 } satisfies IconsType

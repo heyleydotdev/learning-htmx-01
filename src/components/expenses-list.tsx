@@ -5,6 +5,7 @@ import type { PropsWithChildren } from "hono/jsx"
 import { useRequestContext } from "hono/jsx-renderer"
 
 import { cardTitleClass } from "~/components/shared/card"
+import Spinner from "~/components/shared/spinner"
 
 interface ExpensesListProps {
   context?: Context<HonoEnv>
@@ -33,8 +34,9 @@ export async function ExpensesList({ context }: ExpensesListProps) {
   return (
     <ExpensesListWrapper>
       <ul class="divide-y">
-        <li class="px-6 py-3">
+        <li class="flex items-center gap-x-2 px-6 py-3">
           <h4 class={cardTitleClass()}>Latest Expenses</h4>
+          <Spinner class="htmx-indicator size-4" />
         </li>
         {expenses.map((item) => (
           <li key={item.id} class="grid grid-cols-2 px-6 py-2 text-sm">
@@ -49,7 +51,14 @@ export async function ExpensesList({ context }: ExpensesListProps) {
 
 function ExpensesListWrapper({ children }: PropsWithChildren) {
   return (
-    <div id="expenses-list" class="border shadow-sm" hx-get="/expenses" hx-swap="outerHTML" hx-trigger="newExpense from:body">
+    <div
+      id="expenses-list"
+      class="border shadow-sm"
+      hx-ext="loading-states"
+      hx-get="/expenses"
+      hx-swap="outerHTML"
+      hx-trigger="newExpense from:body"
+    >
       {children}
     </div>
   )

@@ -15,7 +15,6 @@ export default function CreateForm({ alert, ...rest }: CreateFormProps) {
   return (
     <Form
       id="create-expense"
-      hx-ext="response-targets"
       hx-post="/"
       hx-swap="outerHTML show:none"
       hx-target="this"
