@@ -1,11 +1,10 @@
 import type { FormContextValues } from "~/components/shared/form"
-import type { PropsWithChildren } from "hono/jsx"
 
 import Button from "~/components/shared/button"
 import { Form, FormButton, FormControl, FormField, FormFieldset, FormLabel, FormMessage } from "~/components/shared/form"
 import Input from "~/components/shared/input"
 
-export default function CreateForm({ children, ...rest }: PropsWithChildren<FormContextValues>) {
+export default function CreateForm(props: FormContextValues) {
   const today = new Date().toISOString().slice(0, 10)
 
   return (
@@ -16,10 +15,9 @@ export default function CreateForm({ children, ...rest }: PropsWithChildren<Form
       hx-swap="outerHTML focus-scroll:false"
       hx-target="this"
       hx-target-400="this"
-      {...rest}
+      {...props}
     >
       <FormFieldset>
-        {children}
         <FormField name="expense">
           <FormLabel>Expense</FormLabel>
           <FormControl>

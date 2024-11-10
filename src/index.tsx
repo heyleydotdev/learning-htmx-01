@@ -34,7 +34,7 @@ const app = new Hono<HonoEnv>({
   //   if (/^\/(?!api(\/|$)|.*\.\w{2,4}$).*$/.test(url.pathname)) {
   //     url.pathname = `/pages${url.pathname.replace(/\/$/, "")}`
   //   }
-  //   return req.url
+  //   return url.pathname
   // },
 })
 

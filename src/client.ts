@@ -9,15 +9,21 @@ import "htmx.org/dist/ext/response-targets"
 import "htmx.org/dist/ext/loading-states"
 import "node-snackbar/dist/snackbar"
 
-if (import.meta.env.DEV) {
-  htmx.logAll()
-}
-
-document.body.addEventListener("serverError", () => {
+const showSnackbar = (message: string) => {
   Snackbar.show({
     pos: "bottom-right",
-    text: "Something went wrong. Please try again in a moment.",
+    text: message,
     backgroundColor: "var(--toast-background-color)",
     actionTextColor: "var(--toast-dismiss-color)",
   })
+}
+
+document.body.addEventListener("showSnackbar", (event) => {
+  if (event.detail.value) {
+    showSnackbar(event.detail.value as string)
+  }
+})
+
+document.body.addEventListener("serverError", () => {
+  showSnackbar("Something went wrong. Please try again in a moment.")
 })
