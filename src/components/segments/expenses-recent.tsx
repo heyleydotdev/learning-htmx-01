@@ -9,25 +9,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/shared/ca
 import Spinner from "~/components/shared/spinner"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/shared/table"
 
-interface ExpensesListProps {
+interface RecentExpensesProps {
   context?: Context<HonoEnv>
 }
 
-export async function ExpensesList() {
+export async function RecentExpenses() {
   return (
-    <ExpensesListWrapper>
-      <ExpensesListInner />
-    </ExpensesListWrapper>
+    <RecentExpensesWrapper>
+      <RecentExpensesInner />
+    </RecentExpensesWrapper>
   )
 }
 
-export async function ExpensesListInner({ context }: ExpensesListProps) {
+export async function RecentExpensesInner({ context }: RecentExpensesProps) {
   const c = context ?? useRequestContext<HonoEnv>()
+
   const getExpenses = await c.var.db.query.expensesTable.findMany({
     orderBy: (fields, ops) => ops.desc(fields.createdAt),
     limit: 10,
   })
-
   const expenses = getExpenses.map((e) => ({
     ...e,
     amount: new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(e.amount),
@@ -35,7 +35,13 @@ export async function ExpensesListInner({ context }: ExpensesListProps) {
   }))
 
   if (!expenses.length) {
-    return <div class="px-6 py-16 text-center text-sm/6 text-gray-500">No expenses found. Add your first expense!</div>
+    return (
+      <TableRow>
+        <TableCell colspan={3} class="h-24 text-center text-gray-500">
+          No expenses found.
+        </TableCell>
+      </TableRow>
+    )
   }
 
   return (
@@ -53,11 +59,11 @@ export async function ExpensesListInner({ context }: ExpensesListProps) {
   )
 }
 
-function ExpensesListWrapper({ children }: PropsWithChildren) {
+function RecentExpensesWrapper({ children }: PropsWithChildren) {
   return (
     <Card
       hx-ext="loading-states"
-      hx-get="/expenses"
+      hx-get="/api/expenses/recent"
       hx-swap="innerHTML"
       hx-target="#expenses-table"
       hx-trigger="newExpense from:body"
@@ -65,7 +71,7 @@ function ExpensesListWrapper({ children }: PropsWithChildren) {
     >
       <CardHeader>
         <CardTitle class="flex items-center justify-between gap-2">
-          <span>Latest Expenses</span>
+          <span>Recently Added Expenses</span>
           <Spinner class="htmx-indicator size-5" />
         </CardTitle>
       </CardHeader>

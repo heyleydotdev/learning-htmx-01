@@ -1,6 +1,6 @@
 import type { ButtonProps } from "~/components/shared/button"
 import type { LabelProps } from "~/components/shared/label"
-import type { FixKeyIssue } from "~/types"
+import type { FixKeyIssue } from "~/types/types"
 import type { Child, JSX, PropsWithChildren } from "hono/jsx"
 import type { ParsedFormValue } from "hono/types"
 

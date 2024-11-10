@@ -1,4 +1,4 @@
-import type { FixKeyIssue } from "~/types"
+import type { FixKeyIssue } from "~/types/types"
 import type { JSX } from "hono/jsx"
 
 import { Icons } from "~/components/icons"

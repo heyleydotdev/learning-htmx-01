@@ -1,6 +1,6 @@
 import { jsxRenderer } from "hono/jsx-renderer"
 
-export const renderer = jsxRenderer(({ children }) => {
+export const _layoutRoot = jsxRenderer(({ children }) => {
   return (
     <html class="h-full">
       <head>

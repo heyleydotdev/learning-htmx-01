@@ -1,6 +1,23 @@
 import type { PropsWithChildren } from "hono/jsx"
 
-import { useRequestContext } from "hono/jsx-renderer"
+import { jsxRenderer, useRequestContext } from "hono/jsx-renderer"
+
+export const _layoutApp = jsxRenderer(({ children, Layout }) => {
+  return (
+    <Layout>
+      <LayoutApp>{children}</LayoutApp>
+    </Layout>
+  )
+})
+
+export function LayoutApp({ children }: PropsWithChildren) {
+  return (
+    <div class="flex min-h-full flex-col">
+      <AppHeader />
+      <main class="container flex-1 pb-20 pt-8">{children}</main>
+    </div>
+  )
+}
 
 export default function AppHeader() {
   return (
@@ -13,7 +30,9 @@ export default function AppHeader() {
         </a>
       </div>
       <div class="justify-self-end">
-        <NavLink href="/">Home</NavLink>
+        <NavLink href="/" exact>
+          Home
+        </NavLink>
       </div>
     </header>
   )
@@ -26,7 +45,7 @@ interface NavLinkProps {
 
 function NavLink({ href, exact, children }: PropsWithChildren<NavLinkProps>) {
   const pathname = useRequestContext().req.path
-  const isActive = exact ? pathname === href : href.startsWith(pathname)
+  const isActive = exact ? pathname === href : pathname.startsWith(href)
 
   return (
     <a
