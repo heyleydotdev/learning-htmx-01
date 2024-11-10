@@ -5,6 +5,7 @@
 // @ts-nocheck
 
 import "htmx.org/dist/htmx.esm"
+import "htmx.org/dist/ext/response-targets"
 import "htmx.org/dist/ext/loading-states"
 import "node-snackbar/dist/snackbar"
 

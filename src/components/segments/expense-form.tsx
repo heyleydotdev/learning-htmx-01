@@ -9,7 +9,15 @@ export default function CreateForm({ children, ...rest }: PropsWithChildren<Form
   const today = new Date().toISOString().slice(0, 10)
 
   return (
-    <Form id="create-expense" hx-put="/api/expenses" hx-swap="outerHTML focus-scroll:false" hxta {...rest}>
+    <Form
+      id="create-expense"
+      hx-ext="response-targets"
+      hx-put="/api/expenses"
+      hx-swap="outerHTML focus-scroll:false"
+      hx-target="this"
+      hx-target-400="this"
+      {...rest}
+    >
       <FormFieldset>
         {children}
         <FormField name="expense">
