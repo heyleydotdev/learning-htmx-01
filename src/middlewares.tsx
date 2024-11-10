@@ -1,30 +1,21 @@
 import type { HonoEnv } from "~/index"
+import type { MiddlewareHandler } from "hono"
 import type { z } from "zod"
 
 import { createMiddleware } from "hono/factory"
 import { validator } from "hono/validator"
 
 import { getDatabase } from "~/db"
-import { flattenZodFieldErrors } from "~/lib/utils"
+import { flattenZodFieldErrors, isAPIRoute } from "~/lib/utils"
 
 type HonoValidatorArgs = Parameters<typeof validator>
 export const zFormValidator = <T extends z.Schema, R extends HonoValidatorArgs[0]>(target: R, schema: T) => {
   return validator(target, (value) => {
     const parse = schema.safeParse(value)
-
     if (!parse.success) {
-      return {
-        value,
-        valid: undefined,
-        errors: flattenZodFieldErrors(parse.error),
-      }
+      return { value, valid: undefined, errors: flattenZodFieldErrors(parse.error) }
     }
-
-    return {
-      value: {},
-      valid: parse.data as z.output<T>,
-      errors: undefined,
-    }
+    return { value: {}, valid: parse.data as z.output<T>, errors: undefined }
   })
 }
 
@@ -48,3 +39,21 @@ export const _devTiming = createMiddleware<HonoEnv>(async (c, next) => {
   const end = Date.now()
   console.log(`[RPC] ${c.req.path} took ${end - start}ms to execute`)
 })
+
+export const usePagesMiddleware = (m: MiddlewareHandler) => {
+  return createMiddleware(async (c, next) => {
+    if (!isAPIRoute(c.req.path)) {
+      return m(c, next)
+    }
+    return next()
+  })
+}
+
+export const useAPIMiddleware = (m: MiddlewareHandler) => {
+  return createMiddleware(async (c, next) => {
+    if (isAPIRoute(c.req.path)) {
+      return m(c, next)
+    }
+    return next()
+  })
+}

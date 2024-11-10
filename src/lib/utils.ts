@@ -12,3 +12,7 @@ export const flattenZodFieldErrors = (error: ZodError) =>
     }
     return acc
   }, {})
+
+export const isAPIRoute = (path: string) => {
+  return path === "/api" || path.startsWith("/api/")
+}
