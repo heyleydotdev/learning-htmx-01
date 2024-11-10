@@ -1,3 +1,5 @@
+@import "node-snackbar/dist/snackbar.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,10 +8,16 @@
   color-scheme: light;
 
   --font-sans: InterVariable;
+  --toast-background-color: theme(colors.gray[800]);
+  --toast-dismiss-color: theme(colors.indigo[400]);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
   right: 10px; /* Positions the icon at the end */
   left: auto;
+}
+
+.snackbar-container {
+  font-family: var(--font-sans) !important;
 }

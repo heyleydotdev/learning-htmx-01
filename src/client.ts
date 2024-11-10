@@ -2,15 +2,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import "htmx.org/dist/htmx.esm";
-import 'htmx.org/dist/ext/loading-states'
+// @ts-nocheck
 
-if(import.meta.env.DEV) {
-  // @ts-expect-error
-  htmx.logAll();
+import "htmx.org/dist/htmx.esm"
+import "htmx.org/dist/ext/loading-states"
+import "node-snackbar/dist/snackbar"
+
+if (import.meta.env.DEV) {
+  htmx.logAll()
 }
 
-// TODO: show toast or something 
-document.body.addEventListener('serverError', () => {
-  alert('serverError')
+document.body.addEventListener("serverError", () => {
+  Snackbar.show({
+    pos: "bottom-right",
+    text: "Something went wrong. Please try again in a moment.",
+    backgroundColor: "var(--toast-background-color)",
+    actionTextColor: "var(--toast-dismiss-color)",
+  })
 })

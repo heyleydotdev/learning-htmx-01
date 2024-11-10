@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
     tsconfigPaths(),
     inject({
       htmx: "htmx.org/dist/htmx.esm",
+      Snackbar: "node-snackbar/dist/snackbar",
       exclude: ["**/*.css", "**/*.css?direct"],
     }),
   ]

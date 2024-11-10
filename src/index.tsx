@@ -43,6 +43,8 @@ app.onError((_, c) => {
   if (!isAPIRoute(c.req.path)) {
     c.setRenderer((content) => c.html(content))
     return c.render(<ErrorPage />)
+  } else {
+    c.header("HX-Trigger", "serverError")
   }
   return c.body("Internal Server Error")
 })

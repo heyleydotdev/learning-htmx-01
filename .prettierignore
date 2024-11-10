@@ -1,4 +1,3 @@
 node_modules
 public
 **/assets/**/*.js
-src/client.ts
