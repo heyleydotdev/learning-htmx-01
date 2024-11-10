@@ -10,3 +10,10 @@ declare module "hono/jsx" {
     }
   }
 }
+
+declare module "hono" {
+  interface ContextRenderer {
+    // eslint-disable-next-line @typescript-eslint/prefer-function-type
+    (content: string | Promise<string>, props?: { title?: string }): Response
+  }
+}

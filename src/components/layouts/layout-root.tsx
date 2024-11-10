@@ -1,13 +1,16 @@
 import { jsxRenderer } from "hono/jsx-renderer"
 
-export const _layoutRoot = jsxRenderer(({ children }) => {
+export const _layoutRoot = jsxRenderer(({ children, title }) => {
+  const appName = "Expense Tracker"
+  const pageTitle = title ? `${title} - ${appName}` : appName
+
   return (
-    <html class="h-full">
+    <html class="h-full overflow-y-scroll">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <title>Expense Tracker</title>
+        <title>{pageTitle}</title>
 
         <link
           rel="icon"
@@ -33,7 +36,9 @@ export const _layoutRoot = jsxRenderer(({ children }) => {
           }}
         />
       </head>
-      <body class="h-full bg-white font-sans text-gray-600 antialiased">{children}</body>
+      <body class="h-full bg-white font-sans text-gray-600 antialiased" hx-boost="true">
+        {children}
+      </body>
     </html>
   )
 })

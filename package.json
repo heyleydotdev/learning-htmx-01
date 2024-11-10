@@ -10,7 +10,7 @@
     "build:server": "vite build",
     "build:client": "vite build --mode client",
     "preview": "wrangler pages dev",
-    "deploy": "bun run build && wrangler pages deploy",
+    "deploy": "bun run clean && bun run build && wrangler pages deploy",
     "cft": "wrangler types --env-interface CloudflareBindings",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "clean": "git clean -xdf dist debug.log",

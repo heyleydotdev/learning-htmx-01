@@ -27,17 +27,12 @@ export const _setVariables = createMiddleware<HonoEnv>((c, next) => {
 
 // https://github.com/t3-oss/create-t3-turbo/blob/8ca45cd2b06096c14d36a713dce32d7afcb1fed7/packages/api/src/trpc.ts#L99
 export const _devTiming = createMiddleware<HonoEnv>(async (c, next) => {
-  const start = Date.now()
-
-  if (c.env.ENVIRONMENT === "development") {
+  if (import.meta.env.DEV) {
     // artificial delay in dev
     const waitMs = Math.floor(Math.random() * 600) + 100
     await new Promise((resolve) => setTimeout(resolve, waitMs))
   }
   await next()
-
-  const end = Date.now()
-  console.log(`[RPC] ${c.req.path} took ${end - start}ms to execute`)
 })
 
 export const usePagesMiddleware = (m: MiddlewareHandler) => {

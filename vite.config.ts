@@ -28,6 +28,8 @@ export default defineConfig(({ mode }) => {
           output: {
             entryFileNames: "static/client.js",
             assetFileNames: "static/assets/[name].[ext]",
+            chunkFileNames: "static/assets/[name]-[hash].js",
+            manualChunks: manualChunks,
           },
         },
         manifest: true,
@@ -49,3 +51,9 @@ export default defineConfig(({ mode }) => {
     }
   }
 })
+
+function manualChunks(id: string) {
+  if (id.match(/node_modules\/node-snackbar\/dist/)) {
+    return "snackbar"
+  }
+}

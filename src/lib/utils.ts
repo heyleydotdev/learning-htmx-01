@@ -16,3 +16,24 @@ export const flattenZodFieldErrors = (error: ZodError) =>
 export const isAPIRoute = (path: string) => {
   return path === "/api" || path.startsWith("/api/")
 }
+
+export const formatCurrency = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n)
+
+export const getDayStart = (date: Date) => {
+  date.setUTCHours(0, 0, 0, 0)
+  return date
+}
+
+export const getWeekRange = (): [Date, Date] => {
+  const today = new Date()
+  const day = today.getDay()
+  const startOfWeek = new Date(today)
+  const endOfWeek = new Date(today)
+
+  startOfWeek.setDate(today.getDate() - day)
+  startOfWeek.setUTCHours(0, 0, 0, 0)
+
+  endOfWeek.setDate(today.getDate() + (6 - day))
+
+  return [startOfWeek, endOfWeek]
+}

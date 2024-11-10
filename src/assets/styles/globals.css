@@ -14,7 +14,7 @@
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
-  right: 10px; /* Positions the icon at the end */
+  right: 10px;
   left: auto;
 }
 

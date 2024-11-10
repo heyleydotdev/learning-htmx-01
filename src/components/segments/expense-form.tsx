@@ -27,22 +27,24 @@ export default function CreateForm(props: FormContextValues) {
           </FormControl>
           <FormMessage />
         </FormField>
-        <FormField name="amount">
-          <FormLabel>Amount</FormLabel>
-          <FormControl>
-            {(props) => <Input type="number" min={0} placeholder="100.75" step={0.01} required {...props} />}
-          </FormControl>
-          <FormMessage />
-        </FormField>
-        <FormField name="date">
-          <FormLabel>Date</FormLabel>
-          <FormControl>{(props) => <Input type="date" max={today} value={today} required {...props} />}</FormControl>
-          <FormMessage />
-        </FormField>
+        <div class="grid grid-cols-2 gap-x-6 max-sm:contents">
+          <FormField name="amount">
+            <FormLabel>Amount</FormLabel>
+            <FormControl>
+              {(props) => <Input type="number" min={0} placeholder="100.75" step={0.01} required {...props} />}
+            </FormControl>
+            <FormMessage />
+          </FormField>
+          <FormField name="date">
+            <FormLabel>Date</FormLabel>
+            <FormControl>{(props) => <Input type="date" max={today} value={today} required {...props} />}</FormControl>
+            <FormMessage />
+          </FormField>
+        </div>
 
         <div class="flex items-center justify-end gap-3">
           <Button variant={"ghost"} type="reset">
-            Clear Form
+            Reset Changes
           </Button>
           <FormButton type="submit">Save Expense</FormButton>
         </div>

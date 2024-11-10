@@ -4,13 +4,6 @@ compatibility_date = "2024-11-08"
 pages_build_output_dir = "./dist"
 compatibility_flags = [ "nodejs_compat" ]
 
-vars = { ENVIRONMENT = "development" }
-d1_databases = [
-  { binding = "D1_DATABASE", database_name = "learning-htmx-01", database_id = "", migrations_dir = "drizzle" },
-]
-
-[env.production]
-vars = { ENVIRONMENT = "production" }
 d1_databases = [
   { binding = "D1_DATABASE", database_name = "learning-htmx-01", database_id = "", migrations_dir = "drizzle" },
 ]

@@ -2,9 +2,9 @@ import type { PropsWithChildren } from "hono/jsx"
 
 import { jsxRenderer, useRequestContext } from "hono/jsx-renderer"
 
-export const _layoutApp = jsxRenderer(({ children, Layout }) => {
+export const _layoutApp = jsxRenderer(({ children, Layout, title }) => {
   return (
-    <Layout>
+    <Layout title={title}>
       <LayoutApp>{children}</LayoutApp>
     </Layout>
   )
@@ -33,6 +33,7 @@ export default function AppHeader() {
         <NavLink href="/" exact>
           Home
         </NavLink>
+        <NavLink href="/expenses">Expenses</NavLink>
       </div>
     </header>
   )
@@ -50,7 +51,7 @@ function NavLink({ href, exact, children }: PropsWithChildren<NavLinkProps>) {
   return (
     <a
       href={href}
-      class="p-2 text-sm font-medium text-gray-600 last:pr-0 hover:text-gray-950 aria-[current=page]:text-gray-950"
+      class="px-3 py-2 text-sm font-medium text-gray-600 last:pr-0 hover:text-gray-950 aria-[current=page]:text-gray-950"
       {...(isActive && { "aria-current": "page" })}
     >
       {children}

@@ -8,6 +8,7 @@ import { useRequestContext } from "hono/jsx-renderer"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/shared/card"
 import Spinner from "~/components/shared/spinner"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/shared/table"
+import { formatCurrency } from "~/lib/utils"
 
 interface RecentExpensesProps {
   context?: Context<HonoEnv>
@@ -30,7 +31,7 @@ export async function RecentExpensesInner({ context }: RecentExpensesProps) {
   })
   const expenses = getExpenses.map((e) => ({
     ...e,
-    amount: new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(e.amount),
+    amount: formatCurrency(e.amount),
     date: e.date.toLocaleDateString("en-US", { dateStyle: "medium" }),
   }))
 
