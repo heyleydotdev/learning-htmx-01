@@ -59,7 +59,7 @@ const FormField = ({ name, class: className, ...rest }: FormFieldProps) => {
 
   return (
     <FormFieldContext.Provider value={{ id, name }}>
-      <div class={cn("space-y-2", className)} {...rest} />
+      <div class={cn("grid grid-cols-1 gap-y-2", className)} {...rest} />
     </FormFieldContext.Provider>
   )
 }

@@ -15,11 +15,11 @@ export const TableHeader = ({ class: className, ...rest }: JSX.IntrinsicElements
 }
 
 export const TableBody = ({ class: className, ...rest }: JSX.IntrinsicElements["tbody"]) => {
-  return <tbody className={cn("[&_tr:last-child]:border-0", className)} {...rest} />
+  return <tbody className={cn("divide-y", className)} {...rest} />
 }
 
 export const TableRow = ({ class: className, ...rest }: JSX.IntrinsicElements["tr"]) => {
-  return <tr className={cn("border-b transition-colors hover:bg-gray-50", className)} {...rest} />
+  return <tr className={cn("transition-colors hover:bg-gray-50", className)} {...rest} />
 }
 
 export const TableHead = ({ class: className, ...rest }: JSX.IntrinsicElements["th"]) => {
