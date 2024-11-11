@@ -12,7 +12,7 @@ export const _layoutApp = jsxRenderer(({ children, Layout, title }) => {
 
 export function LayoutApp({ children }: PropsWithChildren) {
   return (
-    <div class="flex min-h-full flex-col">
+    <div class="isolate flex min-h-full flex-col">
       <AppHeader />
       <main class="container flex-1 pb-20 pt-8">{children}</main>
     </div>

@@ -1,4 +1,5 @@
 @import "node-snackbar/dist/snackbar.css";
+@import "nprogress/nprogress.css";
 
 @tailwind base;
 @tailwind components;
@@ -10,6 +11,7 @@
   --font-sans: InterVariable;
   --toast-background-color: theme(colors.gray[800]);
   --toast-dismiss-color: theme(colors.indigo[400]);
+  --nprogress-backdround-color: theme(colors.indigo[500]);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -20,4 +22,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .snackbar-container {
   font-family: var(--font-sans) !important;
+}
+
+#nprogress .bar {
+  background: var(--nprogress-backdround-color);
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px var(--nprogress-backdround-color),
+    0 0 5px var(--nprogress-backdround-color);
 }

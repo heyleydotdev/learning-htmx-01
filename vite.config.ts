@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
     inject({
       htmx: "htmx.org/dist/htmx.esm",
       Snackbar: "node-snackbar/dist/snackbar",
+      NProgress: "nprogress/nprogress.js",
       exclude: ["**/*.css", "**/*.css?direct"],
     }),
   ]
@@ -55,5 +56,8 @@ export default defineConfig(({ mode }) => {
 function manualChunks(id: string) {
   if (id.match(/node_modules\/node-snackbar\/dist/)) {
     return "snackbar"
+  }
+  if (id.match(/node_modules\/nprogress/)) {
+    return "nprogress"
   }
 }

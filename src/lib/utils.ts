@@ -6,6 +6,8 @@ import { twMerge } from "tailwind-merge"
 
 export const cn = (...inputs: Parameters<typeof cx>) => twMerge(cx(inputs))
 
+export const sleep = (timeout: number) => new Promise((res) => setTimeout(res, timeout))
+
 export const flattenZodFieldErrors = (error: ZodError) =>
   Object.entries(error.flatten().fieldErrors).reduce<Record<string, string>>((acc, [key, errors]) => {
     if (errors?.[0]) {
