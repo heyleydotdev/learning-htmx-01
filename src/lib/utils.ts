@@ -1,6 +1,7 @@
 import type { ZodError } from "zod"
 
 import { cx } from "class-variance-authority"
+import moment from "moment"
 import { twMerge } from "tailwind-merge"
 
 export const cn = (...inputs: Parameters<typeof cx>) => twMerge(cx(inputs))
@@ -19,21 +20,9 @@ export const isAPIRoute = (path: string) => {
 
 export const formatCurrency = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n)
 
-export const getDayStart = (date: Date) => {
-  date.setUTCHours(0, 0, 0, 0)
-  return date
-}
-
 export const getWeekRange = (): [Date, Date] => {
-  const today = new Date()
-  const day = today.getDay()
-  const startOfWeek = new Date(today)
-  const endOfWeek = new Date(today)
-
-  startOfWeek.setDate(today.getDate() - day)
-  startOfWeek.setUTCHours(0, 0, 0, 0)
-
-  endOfWeek.setDate(today.getDate() + (6 - day))
+  const startOfWeek = moment().utc().startOf("week").startOf("day").toDate()
+  const endOfWeek = moment().utc().endOf("week").startOf("day").toDate()
 
   return [startOfWeek, endOfWeek]
 }

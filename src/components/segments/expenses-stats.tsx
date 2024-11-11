@@ -2,11 +2,12 @@ import type { HonoEnv } from "~/index"
 import type { Context } from "hono"
 
 import { useRequestContext } from "hono/jsx-renderer"
-import { and, eq, gte, lte, sum } from "drizzle-orm"
+import { and, gte, lte, sum } from "drizzle-orm"
+import moment from "moment"
 
 import { Card } from "~/components/shared/card"
 import { expensesTable } from "~/db/schema"
-import { formatCurrency, getDayStart, getWeekRange } from "~/lib/utils"
+import { formatCurrency, getWeekRange } from "~/lib/utils"
 
 interface ExpensesStatsProps {
   context?: Context<HonoEnv>
@@ -14,14 +15,13 @@ interface ExpensesStatsProps {
 
 export default async function ExpensesStats({ context }: ExpensesStatsProps) {
   const c = context ?? useRequestContext<HonoEnv>()
-  const todayStart = getDayStart(new Date())
-  const [weekFirst, weekLast] = getWeekRange()
 
+  const [weekFirst, weekLast] = getWeekRange()
   const [[today], [week]] = await c.var.db.batch([
     c.var.db
       .select({ total: sum(expensesTable.amount) })
       .from(expensesTable)
-      .where(eq(expensesTable.date, todayStart)),
+      .where(gte(expensesTable.date, moment().utc().startOf("day").toDate())),
     c.var.db
       .select({ total: sum(expensesTable.amount) })
       .from(expensesTable)

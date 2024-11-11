@@ -1,11 +1,13 @@
 import type { FormContextValues } from "~/components/shared/form"
 
+import moment from "moment"
+
 import Button from "~/components/shared/button"
 import { Form, FormButton, FormControl, FormField, FormFieldset, FormLabel, FormMessage } from "~/components/shared/form"
 import Input from "~/components/shared/input"
 
 export default function CreateForm(props: FormContextValues) {
-  const today = new Date().toISOString().slice(0, 10)
+  const today = moment().utc().format("YYYY-MM-DD")
 
   return (
     <Form
