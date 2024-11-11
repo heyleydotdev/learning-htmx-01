@@ -50,7 +50,7 @@ export async function RecentExpensesInner({ context }: RecentExpensesProps) {
       {expenses.map((item) => (
         <TableRow key={item.id}>
           <TableCell class="text-gray-950">
-            <p class="line-clamp-2 max-w-56 whitespace-normal break-words">{item.expense}</p>
+            <p class="line-clamp-2 min-w-24 max-w-56 whitespace-normal break-words">{item.expense}</p>
           </TableCell>
           <TableCell class="font-medium text-red-600">-{item.amount}</TableCell>
           <TableCell class="text-end text-[0.8rem]/6">{item.date}</TableCell>

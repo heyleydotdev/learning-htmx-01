@@ -21,7 +21,7 @@ export default async function ExpensesStats({ context }: ExpensesStatsProps) {
     c.var.db
       .select({ total: sum(expensesTable.amount) })
       .from(expensesTable)
-      .where(gte(expensesTable.date, moment().utc().startOf("day").toDate())),
+      .where(gte(expensesTable.date, moment.utc().startOf("day").toDate())),
     c.var.db
       .select({ total: sum(expensesTable.amount) })
       .from(expensesTable)

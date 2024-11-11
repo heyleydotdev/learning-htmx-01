@@ -23,8 +23,8 @@ export const isAPIRoute = (path: string) => {
 export const formatCurrency = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n)
 
 export const getWeekRange = (): [Date, Date] => {
-  const startOfWeek = moment().utc().startOf("week").startOf("day").toDate()
-  const endOfWeek = moment().utc().endOf("week").startOf("day").toDate()
+  const startOfWeek = moment.utc().startOf("isoWeek").startOf("day").toDate()
+  const endOfWeek = moment.utc().endOf("isoWeek").endOf("day").toDate()
 
   return [startOfWeek, endOfWeek]
 }

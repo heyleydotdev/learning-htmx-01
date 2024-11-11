@@ -10,8 +10,24 @@ import "htmx.org/dist/ext/loading-states"
 import "node-snackbar/dist/snackbar"
 import "nprogress/nprogress"
 
-NProgress.configure({
-  showSpinner: false,
+NProgress.configure({ showSpinner: false })
+
+document.addEventListener("htmx:configRequest", (event) => {
+  if (event.detail.boosted && event.detail.verb === "get") {
+    NProgress.start()
+  }
+})
+
+document.addEventListener("htmx:afterRequest", (event) => {
+  if (event.detail.boosted) {
+    NProgress.done(true)
+  }
+})
+
+document.addEventListener("htmx:responseError", (event) => {
+  if (event.detail.boosted) {
+    NProgress.done(true)
+  }
 })
 
 const showSnackbar = (message: string) => {
@@ -31,22 +47,4 @@ document.body.addEventListener("showSnackbar", (event) => {
 
 document.body.addEventListener("serverError", () => {
   showSnackbar("Something went wrong. Please try again in a moment.")
-})
-
-document.addEventListener("htmx:configRequest", (event) => {
-  if (event.detail.boosted && event.detail.verb === "get") {
-    NProgress.start()
-  }
-})
-
-document.addEventListener("htmx:afterRequest", (event) => {
-  if (event.detail.boosted) {
-    NProgress.done(true)
-  }
-})
-
-document.addEventListener("htmx:responseError", (event) => {
-  if (event.detail.boosted) {
-    NProgress.done(true)
-  }
 })

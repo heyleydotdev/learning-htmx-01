@@ -7,7 +7,7 @@ import { Form, FormButton, FormControl, FormField, FormFieldset, FormLabel, Form
 import Input from "~/components/shared/input"
 
 export default function CreateForm(props: FormContextValues) {
-  const today = moment().utc().format("YYYY-MM-DD")
+  const today = moment.utc().format("YYYY-MM-DD")
 
   return (
     <Form

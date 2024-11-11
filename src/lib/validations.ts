@@ -7,8 +7,8 @@ export const _expenseSchema = z.object({
   date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
-    .transform((s) => moment(s).utc(true).toDate())
+    .transform((s) => moment.utc(s).startOf("day").toDate())
     .refine((d) => {
-      return moment(d).isSameOrBefore(moment.now(), "day")
+      return moment(d).isSameOrBefore(moment.utc(), "day")
     }, "Please select a date that is today or earlier"),
 })
