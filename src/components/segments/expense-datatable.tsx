@@ -100,7 +100,6 @@ function ExpenseDataTableSearch() {
         name="search"
         hx-get="/expenses"
         hx-trigger="input changed delay:500ms, search"
-        hx-vals={JSON.stringify({ page: c.var.pagination.currentPage })}
         hx-push-url="true"
         placeholder="Search..."
         value={c.var.pagination.search}

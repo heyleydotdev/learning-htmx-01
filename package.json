@@ -15,9 +15,9 @@
     "check": "bun run typecheck && bun run lint",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "typecheck": "tsc --noEmit",
-    "clean": "git clean -xdf dist debug.log *.tsbuildinfo",
-    "db:generate": "bun --env-file=../../.env run drizzle-kit generate",
-    "db:migrate": "bun --env-file=../../.env run drizzle-kit migrate",
+    "clean": "git clean -xdf dist debug.log './*.tsbuildinfo'",
+    "db:generate": "bun --env-file=.env run drizzle-kit generate",
+    "db:migrate": "bun --env-file=.env run drizzle-kit migrate",
     "db:push": "bun run db:generate && wrangler d1 migrations apply learning-htmx-01 --local",
     "db:push:prod": "bun run db:generate && bun run db:migrate"
   },
