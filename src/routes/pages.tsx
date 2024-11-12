@@ -2,6 +2,7 @@ import type { HonoEnv } from "~/index"
 
 import { Hono } from "hono"
 
+import ExpenseDataTable from "~/components/segments/expense-datatable"
 import CreateForm from "~/components/segments/expense-form"
 import { RecentExpenses } from "~/components/segments/expenses-recent"
 import ExpensesStats from "~/components/segments/expenses-stats"
@@ -26,5 +27,10 @@ export const indexRoutes = new Hono<HonoEnv>()
     )
   })
   .get("/expenses", (c) => {
-    return c.render(<div>Expense DataTable</div>, { title: "Expenses" })
+    return c.render(
+      <div>
+        <ExpenseDataTable />
+      </div>,
+      { title: "Expenses" }
+    )
   })

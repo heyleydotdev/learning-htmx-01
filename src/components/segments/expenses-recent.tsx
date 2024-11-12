@@ -2,24 +2,23 @@ import type { HonoEnv } from "~/index"
 import type { Context } from "hono"
 import type { PropsWithChildren } from "hono/jsx"
 
-import { Fragment } from "hono/jsx"
 import { useRequestContext } from "hono/jsx-renderer"
 
+import { ExpenseTableData, ExpenseTableRoot } from "~/components/segments/expense-table"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/shared/card"
 import Spinner from "~/components/shared/spinner"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/shared/table"
 import { formatCurrency } from "~/lib/utils"
-
-interface RecentExpensesProps {
-  context?: Context<HonoEnv>
-}
 
 export async function RecentExpenses() {
   return (
-    <RecentExpensesWrapper>
+    <RecentExpensesOuter>
       <RecentExpensesInner />
-    </RecentExpensesWrapper>
+    </RecentExpensesOuter>
   )
+}
+
+interface RecentExpensesProps {
+  context?: Context<HonoEnv>
 }
 
 export async function RecentExpensesInner({ context }: RecentExpensesProps) {
@@ -35,32 +34,10 @@ export async function RecentExpensesInner({ context }: RecentExpensesProps) {
     date: e.date.toLocaleDateString("en-US", { dateStyle: "medium" }),
   }))
 
-  if (!expenses.length) {
-    return (
-      <TableRow>
-        <TableCell colspan={3} class="h-24 text-center text-gray-500">
-          No expenses found.
-        </TableCell>
-      </TableRow>
-    )
-  }
-
-  return (
-    <Fragment>
-      {expenses.map((item) => (
-        <TableRow key={item.id}>
-          <TableCell class="text-gray-950">
-            <p class="line-clamp-2 min-w-24 max-w-56 whitespace-normal break-words">{item.expense}</p>
-          </TableCell>
-          <TableCell class="font-medium text-red-600">-{item.amount}</TableCell>
-          <TableCell class="text-end text-[0.8rem]/6">{item.date}</TableCell>
-        </TableRow>
-      ))}
-    </Fragment>
-  )
+  return <ExpenseTableData data={expenses} />
 }
 
-function RecentExpensesWrapper({ children }: PropsWithChildren) {
+function RecentExpensesOuter({ children }: PropsWithChildren) {
   return (
     <Card
       hx-ext="loading-states"
@@ -77,14 +54,7 @@ function RecentExpensesWrapper({ children }: PropsWithChildren) {
         </CardTitle>
       </CardHeader>
       <CardContent class="-mx-[--spacing] grid w-auto grid-cols-1">
-        <Table class="[--side-padding:var(--spacing)]">
-          <TableHeader>
-            <TableHead>Expense</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead class="text-end">Date</TableHead>
-          </TableHeader>
-          <TableBody id="expenses-table">{children}</TableBody>
-        </Table>
+        <ExpenseTableRoot class="[--side-padding:var(--spacing)]">{children}</ExpenseTableRoot>
       </CardContent>
     </Card>
   )

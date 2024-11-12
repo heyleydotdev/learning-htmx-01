@@ -15,7 +15,6 @@ export default function CreateForm(props: FormContextValues) {
       hx-ext="response-targets"
       hx-put="/api/expenses"
       hx-swap="outerHTML focus-scroll:false"
-      hx-target="this"
       hx-target-400="this"
       {...props}
     >
