@@ -10,27 +10,18 @@ import "htmx.org/dist/ext/loading-states"
 import "node-snackbar/dist/snackbar"
 import "nprogress/nprogress"
 
-NProgress.configure({ showSpinner: false })
+if (import.meta.env.DEV) {
+  htmx.logAll()
+}
 
-document.addEventListener("htmx:configRequest", (event) => {
-  if (event.detail.boosted && event.detail.verb === "get") {
-    NProgress.start()
-  }
+NProgress.configure({
+  showSpinner: false,
+  speed: 200,
+  template:
+    '<div class="bar" role="bar" hx-history="false"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>',
 })
 
-document.addEventListener("htmx:afterRequest", (event) => {
-  if (event.detail.boosted) {
-    NProgress.done(true)
-  }
-})
-
-document.addEventListener("htmx:responseError", (event) => {
-  if (event.detail.boosted) {
-    NProgress.done(true)
-  }
-})
-
-const showSnackbar = (message: string) => {
+const snackbar = (message: string) => {
   Snackbar.show({
     pos: "bottom-right",
     text: message,
@@ -39,12 +30,41 @@ const showSnackbar = (message: string) => {
   })
 }
 
-document.body.addEventListener("showSnackbar", (event) => {
-  if (event.detail.value) {
-    showSnackbar(event.detail.value as string)
+const startNProgress = (event: Event) => {
+  if (event.detail.boosted && event.detail.verb === "get") {
+    NProgress.start()
   }
-})
+}
 
-document.body.addEventListener("serverError", () => {
-  showSnackbar("Something went wrong. Please try again in a moment.")
+const stopNProgress = (event: Event) => {
+  if (event.detail.boosted) {
+    NProgress.done()
+  }
+}
+
+document.addEventListener("htmx:configRequest", startNProgress)
+document.addEventListener("htmx:afterRequest", stopNProgress)
+document.addEventListener("htmx:responseError", stopNProgress)
+
+const showSnackbar = (event: Event) => {
+  const value = event.detail.value as unknown
+  if (value && typeof value === "string") {
+    snackbar(value)
+  }
+}
+
+const showServerError = () => {
+  snackbar("Something went wrong. Please try again in a moment.")
+}
+
+document.body.addEventListener("showSnackbar", showSnackbar)
+document.body.addEventListener("serverError", showServerError)
+
+window.addEventListener("beforeunload", () => {
+  document.removeEventListener("htmx:configRequest", startNProgress)
+  document.removeEventListener("htmx:afterRequest", stopNProgress)
+  document.removeEventListener("htmx:responseError", stopNProgress)
+
+  document.body.removeEventListener("showSnackbar", showSnackbar)
+  document.body.removeEventListener("serverError", showServerError)
 })
