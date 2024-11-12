@@ -15,4 +15,5 @@ export const _expenseSchema = z.object({
 
 export const _expenseTableQuerySchema = z.object({
   page: z.coerce.number().refine(Boolean).optional().default(1).catch(1),
+  search: z.coerce.string().min(1).max(255).optional().default("").catch(""),
 })
