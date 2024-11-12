@@ -1,6 +1,5 @@
 import type { HonoEnv } from "~/index"
 import type { CreatePagination } from "~/lib/pagination"
-import type { Context } from "hono"
 import type { PropsWithChildren } from "hono/jsx"
 
 import { createMiddleware } from "hono/factory"
@@ -29,11 +28,15 @@ interface DataTableMiddlewareVariables extends HonoEnv {
 }
 
 export const _dataTableMiddleware = createMiddleware<DataTableMiddlewareVariables>(async (c, next) => {
-  const { page: currentPage } = getTableQueries(c)
+  const { page: currentPage } = _expenseTableQuerySchema.parse({
+    page: c.req.query("page"),
+  })
+
   const totalItems = await c.var.db
     .select({ count: count() })
     .from(expensesTable)
     .then((count) => count[0]?.count ?? 0)
+
   const pagination = createPagination({ currentPage, totalItems, pageSize: 20, surroundBy: 2 })
   c.set("pagination", pagination)
   return next()
@@ -103,10 +106,4 @@ async function ExpenseDataTablePagination() {
       </PaginationContent>
     </Pagination>
   )
-}
-
-function getTableQueries(c: Context) {
-  return _expenseTableQuerySchema.parse({
-    page: c.req.query("page"),
-  })
 }
