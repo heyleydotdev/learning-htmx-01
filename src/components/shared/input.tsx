@@ -2,7 +2,9 @@ import type { JSX } from "hono/jsx"
 
 import { cn } from "~/lib/utils"
 
-export default function Input({ class: className, ...rest }: JSX.IntrinsicElements["input"]) {
+export type InputProps = JSX.IntrinsicElements["input"]
+
+export default function Input({ class: className, ...rest }: InputProps) {
   return (
     <input
       class={cn(

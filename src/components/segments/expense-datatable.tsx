@@ -6,9 +6,10 @@ import { createMiddleware } from "hono/factory"
 import { useRequestContext } from "hono/jsx-renderer"
 import { count, like } from "drizzle-orm"
 
+import { Icons } from "~/components/icons"
 import { ExpenseTableData, ExpenseTableRoot } from "~/components/segments/expense-table"
 import { Card } from "~/components/shared/card"
-import Input from "~/components/shared/input"
+import InputIcon from "~/components/shared/input-icon"
 import {
   Pagination,
   PaginationContent,
@@ -17,6 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/shared/pagination"
+import Spinner from "~/components/shared/spinner"
 import { expensesTable } from "~/db/schema"
 import { createPagination } from "~/lib/pagination"
 import { formatCurrency } from "~/lib/utils"
@@ -94,15 +96,23 @@ function ExpenseDataTableSearch() {
 
   return (
     <div>
-      <Input
-        class="w-full max-w-72"
+      <InputIcon
+        class="w-full max-w-80"
         type="search"
         name="search"
+        hx-ext="loading-states"
         hx-get="/expenses"
         hx-trigger="input changed delay:500ms, search"
         hx-push-url="true"
         placeholder="Search..."
+        data-loading-target="previous"
         value={c.var.pagination.search}
+        icon={
+          <span>
+            <Spinner class="invisible absolute size-4" data-loading-class-remove="invisible" data-loading-class="visible" />
+            <Icons.search class="size-4" data-loading-class="invisible" />
+          </span>
+        }
       />
     </div>
   )
