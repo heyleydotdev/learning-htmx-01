@@ -71,7 +71,7 @@ app.use(usePagesMiddleware(_layoutApp))
 app.route("/", indexRoutes)
 
 // API middlewares
-app.use("/api/*", useAPIMiddleware(_devTiming))
+app.use(useAPIMiddleware(_devTiming))
 
 // API Routes
 app.route("/api", apiRoutes)

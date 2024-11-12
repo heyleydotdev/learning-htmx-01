@@ -8,7 +8,7 @@ export const Pagination = ({ class: className, ...rest }: JSX.IntrinsicElements[
 )
 
 export const PaginationContent = ({ class: className, ...rest }: JSX.IntrinsicElements["ul"]) => (
-  <ul class={cn("flex flex-row items-center gap-1", className)} {...rest} />
+  <ul class={cn("flex flex-row flex-wrap items-center gap-1", className)} {...rest} />
 )
 
 export const PaginationItem = (props: JSX.IntrinsicElements["li"]) => <li {...props} />
@@ -22,7 +22,7 @@ export const PaginationLink = ({ class: className, active, ...rest }: Pagination
     aria-current={active ? "page" : undefined}
     className={cn(
       "flex size-9 items-center justify-center border p-1.5 text-center text-sm/6 font-medium shadow-sm hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0",
-      active && "cursor-default bg-gray-100 shadow-none hover:bg-gray-100",
+      active && "pointer-events-none cursor-default bg-gray-100 shadow-none hover:bg-gray-100",
       className
     )}
     {...rest}

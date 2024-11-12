@@ -12,3 +12,7 @@ export const _expenseSchema = z.object({
       return moment(d).isSameOrBefore(moment.utc(), "day")
     }, "Please select a date that is today or earlier"),
 })
+
+export const _expenseTableQuerySchema = z.object({
+  page: z.coerce.number().refine(Boolean).optional().default(1).catch(1),
+})

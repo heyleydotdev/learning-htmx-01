@@ -16,7 +16,9 @@ import {
   PaginationPrevious,
 } from "~/components/shared/pagination"
 import { expensesTable } from "~/db/schema"
+import { createPagination } from "~/lib/pagination"
 import { formatCurrency } from "~/lib/utils"
+import { _expenseTableQuerySchema } from "~/lib/validations"
 
 export default function ExpenseDataTable() {
   return (
@@ -43,14 +45,14 @@ interface ExpenseDataTableInnerProps {
 
 export async function ExpenseDataTableInner({ context }: ExpenseDataTableInnerProps) {
   const c = context ?? useRequestContext<HonoEnv>()
-
-  const currentPage = Number(c.req.query("page") ?? 1)
+  const { page: currentPage } = getTableQueries(c)
 
   const getExpenses = await c.var.db.query.expensesTable.findMany({
     orderBy: (fields, ops) => ops.desc(fields.createdAt),
     offset: (currentPage - 1) * 20,
     limit: 20,
   })
+
   const expenses = getExpenses.map((e) => ({
     ...e,
     amount: formatCurrency(e.amount),
@@ -62,29 +64,42 @@ export async function ExpenseDataTableInner({ context }: ExpenseDataTableInnerPr
 
 export async function ExpenseDataTablePagination({ context }: ExpenseDataTableInnerProps) {
   const c = context ?? useRequestContext<HonoEnv>()
-
-  const currentPage = Number(c.req.query("page") ?? 1)
+  const { page: currentPage } = getTableQueries(c)
 
   const totalItems = await c.var.db
     .select({ count: count() })
     .from(expensesTable)
     .then((count) => count[0]?.count ?? 0)
 
-  const pages = Math.ceil(totalItems / 20)
+  const pagination = createPagination({ currentPage, totalItems, pageSize: 20, surroundBy: 2 })
 
   return (
     <Pagination class="justify-end">
       <PaginationContent>
-        <PaginationPrevious href={`?page=${currentPage - 1 || 1}`} hx-swap="show:none" />
-        {Array.from({ length: pages }).map((_, page) => (
-          <PaginationItem key={page + 1}>
-            <PaginationLink href={`?page=${page + 1}`} hx-swap="show:none" active={currentPage === page + 1}>
-              {page + 1}
+        <PaginationPrevious
+          href={pagination.hasPrevious ? `?page=${pagination.currentPage - 1}` : "#"}
+          active={pagination.isFirstPage}
+          hx-swap="show:none"
+        />
+        {pagination.visiblePages.map((page) => (
+          <PaginationItem key={page}>
+            <PaginationLink href={`?page=${page}`} active={pagination.currentPage === page} hx-swap="show:none">
+              {page}
             </PaginationLink>
           </PaginationItem>
         ))}
-        <PaginationNext href={`?page=${pages === currentPage ? pages : currentPage + 1}`} hx-swap="show:none" />
+        <PaginationNext
+          href={pagination.hasNext ? `?page=${pagination.currentPage + 1}` : "#"}
+          active={pagination.isLastPage}
+          hx-swap="show:none"
+        />
       </PaginationContent>
     </Pagination>
   )
+}
+
+function getTableQueries(c: Context<HonoEnv>) {
+  return _expenseTableQuerySchema.parse({
+    page: c.req.query("page"),
+  })
 }
