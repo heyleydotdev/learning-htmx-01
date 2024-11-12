@@ -1,7 +1,9 @@
 import type { HonoEnv } from "~/index"
+import type { CreatePagination } from "~/lib/pagination"
 import type { Context } from "hono"
 import type { PropsWithChildren } from "hono/jsx"
 
+import { createMiddleware } from "hono/factory"
 import { useRequestContext } from "hono/jsx-renderer"
 import { count } from "drizzle-orm"
 
@@ -20,7 +22,24 @@ import { createPagination } from "~/lib/pagination"
 import { formatCurrency } from "~/lib/utils"
 import { _expenseTableQuerySchema } from "~/lib/validations"
 
-export default function ExpenseDataTable() {
+interface DataTableMiddlewareVariables extends HonoEnv {
+  Variables: HonoEnv["Variables"] & {
+    pagination: ReturnType<CreatePagination>
+  }
+}
+
+export const _dataTableMiddleware = createMiddleware<DataTableMiddlewareVariables>(async (c, next) => {
+  const { page: currentPage } = getTableQueries(c)
+  const totalItems = await c.var.db
+    .select({ count: count() })
+    .from(expensesTable)
+    .then((count) => count[0]?.count ?? 0)
+  const pagination = createPagination({ currentPage, totalItems, pageSize: 20, surroundBy: 2 })
+  c.set("pagination", pagination)
+  return next()
+})
+
+export function ExpenseDataTable() {
   return (
     <div class="grid grid-cols-1 gap-y-6">
       <ExpenseDataTableOuter>
@@ -39,18 +58,13 @@ function ExpenseDataTableOuter({ children }: PropsWithChildren) {
   )
 }
 
-interface ExpenseDataTableInnerProps {
-  context?: Context<HonoEnv>
-}
-
-export async function ExpenseDataTableInner({ context }: ExpenseDataTableInnerProps) {
-  const c = context ?? useRequestContext<HonoEnv>()
-  const { page: currentPage } = getTableQueries(c)
+async function ExpenseDataTableInner() {
+  const c = useRequestContext<DataTableMiddlewareVariables>()
 
   const getExpenses = await c.var.db.query.expensesTable.findMany({
     orderBy: (fields, ops) => ops.desc(fields.createdAt),
-    offset: (currentPage - 1) * 20,
-    limit: 20,
+    offset: (c.var.pagination.currentPage - 1) * 20,
+    limit: c.var.pagination.pageSize,
   })
 
   const expenses = getExpenses.map((e) => ({
@@ -62,16 +76,9 @@ export async function ExpenseDataTableInner({ context }: ExpenseDataTableInnerPr
   return <ExpenseTableData data={expenses} />
 }
 
-export async function ExpenseDataTablePagination({ context }: ExpenseDataTableInnerProps) {
-  const c = context ?? useRequestContext<HonoEnv>()
-  const { page: currentPage } = getTableQueries(c)
-
-  const totalItems = await c.var.db
-    .select({ count: count() })
-    .from(expensesTable)
-    .then((count) => count[0]?.count ?? 0)
-
-  const pagination = createPagination({ currentPage, totalItems, pageSize: 20, surroundBy: 2 })
+async function ExpenseDataTablePagination() {
+  const c = useRequestContext<DataTableMiddlewareVariables>()
+  const pagination = c.var.pagination
 
   return (
     <Pagination class="justify-end">
@@ -98,7 +105,7 @@ export async function ExpenseDataTablePagination({ context }: ExpenseDataTableIn
   )
 }
 
-function getTableQueries(c: Context<HonoEnv>) {
+function getTableQueries(c: Context) {
   return _expenseTableQuerySchema.parse({
     page: c.req.query("page"),
   })
